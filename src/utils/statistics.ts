@@ -29,7 +29,6 @@ class Statistics implements StatisticsI {
   constructor(data: Transaction[]) {
     this.data = data;
     this.parsedData = this.parseData(data);
-    console.log(this.parsedData);
   }
 
   parseDate = (date: string): StatisticsDateI => {

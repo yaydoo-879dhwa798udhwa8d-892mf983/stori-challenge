@@ -7,6 +7,7 @@ import { isEmailValid } from "./utils";
 import { Statistics } from "./utils/statistics";
 
 import { sendEmail } from "./utils/sendEmail";
+import { createCSV, csvExists, readCSV } from "./utils/csvManager";
 const run = async () => {
   let accountEmail: string;
   try {
@@ -21,26 +22,68 @@ const run = async () => {
   console.log("Database Initialized:", appDataSource.isInitialized);
   // Verify if email exists in db
   const accountRepository = new AccountRepository(AppDataSource);
-  const accountExists = (await accountRepository.findByEmail(accountEmail))[0];
   const transactionRepository = new TransactionRepository(AppDataSource);
   let accountTransactions: Transaction[];
   let currentAccount: Account;
+
+  /*    Create or get Account on Database    */
+
+  /* Validate if Account exists */
+
+  const accountExists = (await accountRepository.findByEmail(accountEmail))[0];
+  console.log(accountExists);
   if (accountExists) {
-    // Get Current Account Transactions
-    accountTransactions = await transactionRepository.findByAccount(
-      accountExists
-    );
+    // If Account exists
+    // get Account from Database
     currentAccount = accountExists;
   } else {
+    // If Account doesnt exists
+    // insert Account into database
     console.log("Inserting a new account into the database...");
     currentAccount = await accountRepository.insertAccount(accountEmail);
-    console.log(currentAccount);
+  }
+
+  // -> Account Instance
+  console.log("Account Instance", currentAccount);
+
+  // Validate if file exists
+
+  if (await csvExists(accountEmail)) {
+    // If file exist
+    // Read Data
+    accountTransactions = await readCSV(accountEmail);
+    // Delete Database Account Transaction Data
+
+    await transactionRepository.deleteAccountTransactions(currentAccount);
+
+    // Insert data into Database
+    accountTransactions = accountTransactions.map((tx) => {
+      tx.account = currentAccount;
+      return tx;
+    });
+    await appDataSource.manager.save(accountTransactions);
+  } else {
+    // If file doesnt exists
+    // Insert random Database Transactions
     accountTransactions = await transactionRepository.insertRandomTxsByAccount(
       currentAccount
     );
+    // Create file
+    await createCSV(
+      [
+        { id: "id", title: "Id" },
+        { id: "date", title: "Date" },
+        { id: "transaction", title: "Transaction" },
+      ],
+      accountEmail,
+      accountTransactions
+    );
   }
 
-  console.log(accountTransactions);
+  // Get Transactions from Database
+  accountTransactions = await transactionRepository.findByAccount(
+    accountExists
+  );
 
   const statistics = new Statistics(accountTransactions);
 
