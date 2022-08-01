@@ -13,6 +13,7 @@ services:
   database:
     # Official Postgres image from DockerHub (we use the last version)
     image: 'postgres:latest'
+    container_name: database
 
     # By default, a Postgres database is running on the 5432 port.
     # If we want to access the database from our computer (outside the container),
@@ -28,3 +29,8 @@ services:
       - POSTGRES_USER=username
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=default_database
+  app:
+    build: .
+    container_name: stori_challenge
+    depends_on:
+      - database
