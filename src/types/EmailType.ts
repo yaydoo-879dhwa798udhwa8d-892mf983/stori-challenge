@@ -1,4 +1,7 @@
-import { StatisticsTxPerYearI } from "../utils/statistics";
+import {
+  StatisticsTxAvgPerMonthI,
+  StatisticsTxPerYearI,
+} from "../utils/statistics";
 
 // Send Email
 export interface EmailData {
@@ -6,5 +9,7 @@ export interface EmailData {
   debitAverage: number;
   creditAverage: number;
   monthTransactions: StatisticsTxPerYearI[];
+  debitMonthTransactions: StatisticsTxAvgPerMonthI[];
+  creditMonthTransactions: StatisticsTxAvgPerMonthI[];
   email: string;
 }

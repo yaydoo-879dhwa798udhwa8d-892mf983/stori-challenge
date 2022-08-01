@@ -4,7 +4,7 @@ import { AccountRepository, TransactionRepository } from "./repositories";
 import { TransactionTypeEnum } from "./types/TransactionTypeEnum";
 
 import { isEmailValid } from "./utils";
-import { Statistics } from "./utils/statistics";
+import { Statistics, StatisticsTxAvgPerMonthI } from "./utils/statistics";
 
 import { sendEmail } from "./utils/sendEmail";
 import { createCSV, csvExists, readCSV } from "./utils/csvManager";
@@ -93,15 +93,44 @@ const run = async () => {
 
   const debitAverage = statistics.calculateAvgAmount(TransactionTypeEnum.debit);
   console.log("Average Debit Transactions", debitAverage.toFixed(2));
+  const debitAveragePerMonth: StatisticsTxAvgPerMonthI[] = [];
+
+  ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"].forEach(
+    (month) => {
+      debitAveragePerMonth.push({
+        month,
+        average: statistics.getAvgTxAmountPerMonth(
+          TransactionTypeEnum.debit,
+          month
+        ),
+      });
+    }
+  );
+   // console.log(debitAveragePerMonth);
 
   const accountCreditAverage = statistics.calculateAvgAmount(
     TransactionTypeEnum.credit
   );
-  console.log("Average Credit Transactions", accountCreditAverage.toFixed(2));
+  // console.log("Average Credit Transactions", accountCreditAverage.toFixed(2));
+
+  const creditAveragePerMonth: StatisticsTxAvgPerMonthI[] = [];
+
+  ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"].forEach(
+    (month) => {
+      creditAveragePerMonth.push({
+        month,
+        average: (statistics.getAvgTxAmountPerMonth(
+          TransactionTypeEnum.credit,
+          month
+        ))
+      });
+    }
+  );
+  // console.log(creditAveragePerMonth);
 
   const accountTxPerMonth = statistics.getNumberTxByMonthPerYear();
 
-  const months = {
+/*   const months = {
     "0": "Jan",
     "1": "Feb",
     "2": "Mar",
@@ -118,7 +147,7 @@ const run = async () => {
   console.log("Transactions per Month");
   accountTxPerMonth.forEach((accountTxs) => {
     console.log(`Month:${months[accountTxs.month]}`, accountTxs.transactions);
-  });
+  }); */
 
   sendEmail({
     debitAverage,
@@ -126,6 +155,8 @@ const run = async () => {
     totalBalance: accountTotalBalance,
     creditAverage: accountCreditAverage,
     email: accountEmail,
+    debitMonthTransactions: debitAveragePerMonth,
+    creditMonthTransactions: creditAveragePerMonth,
   }).catch(console.error);
   appDataSource.destroy();
   return;

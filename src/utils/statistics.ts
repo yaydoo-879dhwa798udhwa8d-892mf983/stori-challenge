@@ -17,6 +17,11 @@ export interface StatisticsTxPerYearI {
   transactions: number;
 }
 
+export interface StatisticsTxAvgPerMonthI {
+  month: string;
+  average: number;
+}
+
 interface StatisticsI {
   data: Transaction[];
   parsedData: StatisticsParsedDataI[];
@@ -55,6 +60,27 @@ class Statistics implements StatisticsI {
     data.map(
       (transaction): StatisticsParsedDataI => this.parseTransaction(transaction)
     );
+
+  getTransactionsPerMonth = (month: string) =>
+    this.parsedData.filter((tx) => tx.month == month);
+
+  getAvgTxAmountPerMonth = (
+    transactionType: TransactionTypeEnum.debit | TransactionTypeEnum.credit,
+    month: string
+  ): number => <number>(<unknown>(
+      this.parsedData
+        .filter(
+          (tx) => tx.month == month && tx.transactionType === transactionType
+        )
+        .map((transaction) => transaction.amount)
+        .reduce(
+          (total: any, current: any) => parseFloat(total) + parseFloat(current),
+          0
+        ) /
+      this.parsedData.filter(
+        (tx) => tx.month == month && tx.transactionType === transactionType
+      ).length
+    ).toFixed(2));
 
   calculateTotalBalance = (): number => {
     let total: number = 0;
