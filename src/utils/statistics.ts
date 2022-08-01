@@ -124,8 +124,6 @@ class Statistics implements StatisticsI {
       .map((month) => {
         return { month, transactions: this.getNumberTxByMonth(month) };
       });
-
-  createCSV = () => {};
 }
 
 export { Statistics };

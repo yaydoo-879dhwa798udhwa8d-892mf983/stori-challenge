@@ -19,7 +19,7 @@ const run = async () => {
     return;
   }
   const appDataSource = await AppDataSource.initialize();
-  console.log("Database Initialized:", appDataSource.isInitialized);
+  console.log("Database Conection Initialized:", appDataSource.isInitialized);
   // Verify if email exists in db
   const accountRepository = new AccountRepository(AppDataSource);
   const transactionRepository = new TransactionRepository(AppDataSource);
@@ -31,7 +31,7 @@ const run = async () => {
   /* Validate if Account exists */
 
   const accountExists = (await accountRepository.findByEmail(accountEmail))[0];
-  console.log(accountExists);
+
   if (accountExists) {
     // If Account exists
     // get Account from Database
@@ -44,9 +44,8 @@ const run = async () => {
   }
 
   // -> Account Instance
-  console.log("Account Instance", currentAccount);
 
-  // Validate if file exists
+  /* Validate if file exists */
 
   if (await csvExists(accountEmail)) {
     // If file exist
@@ -89,10 +88,8 @@ const run = async () => {
 
   const accountTotalBalance = statistics.calculateTotalBalance();
 
-  console.log("Total Balance:", accountTotalBalance.toFixed(2));
-
   const debitAverage = statistics.calculateAvgAmount(TransactionTypeEnum.debit);
-  console.log("Average Debit Transactions", debitAverage.toFixed(2));
+
   const debitAveragePerMonth: StatisticsTxAvgPerMonthI[] = [];
 
   ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"].forEach(
@@ -106,12 +103,10 @@ const run = async () => {
       });
     }
   );
-   // console.log(debitAveragePerMonth);
 
   const accountCreditAverage = statistics.calculateAvgAmount(
     TransactionTypeEnum.credit
   );
-  // console.log("Average Credit Transactions", accountCreditAverage.toFixed(2));
 
   const creditAveragePerMonth: StatisticsTxAvgPerMonthI[] = [];
 
@@ -119,35 +114,15 @@ const run = async () => {
     (month) => {
       creditAveragePerMonth.push({
         month,
-        average: (statistics.getAvgTxAmountPerMonth(
+        average: statistics.getAvgTxAmountPerMonth(
           TransactionTypeEnum.credit,
           month
-        ))
+        ),
       });
     }
   );
-  // console.log(creditAveragePerMonth);
 
   const accountTxPerMonth = statistics.getNumberTxByMonthPerYear();
-
-/*   const months = {
-    "0": "Jan",
-    "1": "Feb",
-    "2": "Mar",
-    "3": "Apr",
-    "4": "May",
-    "5": "June",
-    "6": "July",
-    "7": "Aug",
-    "8": "Sept",
-    "9": "Oct",
-    "10": "Nov",
-    "11": "Dec",
-  };
-  console.log("Transactions per Month");
-  accountTxPerMonth.forEach((accountTxs) => {
-    console.log(`Month:${months[accountTxs.month]}`, accountTxs.transactions);
-  }); */
 
   sendEmail({
     debitAverage,

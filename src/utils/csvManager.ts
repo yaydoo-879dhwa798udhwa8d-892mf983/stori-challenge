@@ -5,8 +5,6 @@ const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 const csv = require("csv-parser");
 const fs = require("fs");
 
-const { pipeline } = require("stream/promises");
-
 interface CSVHeaderI {
   id: string;
   title: string;
@@ -48,7 +46,6 @@ async function logChunks(readable) {
   return fileData;
 }
 
-// TODO split validate file and read stream
 const readCSV = async (email: string) => {
   const accountCSVRoute = `src/data/${email}.csv`;
 

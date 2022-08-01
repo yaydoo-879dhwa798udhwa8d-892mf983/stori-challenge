@@ -22,7 +22,7 @@ async function sendEmail(data: EmailData) {
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: '"Stori 👻" <support@stori.com>', // sender address
+    from: '"Stori 💳" <support@stori.com>', // sender address
     to: data.email, // list of receivers
     subject: "Account statement ✔", // Subject line
     text: "Account statement", // plain text body
@@ -66,10 +66,10 @@ async function sendEmail(data: EmailData) {
   </head>
   <body>
     <div style="text-align: center">
-      <!-- <img
+       <img
         src="https://www.storicard.com/_next/static/media/logo.9a85efb3.svg"
         alt="W3Schools.com"
-      /> -->
+      /> 
     </div>
     <br />
     <table id="customers">
