@@ -11,5 +11,7 @@
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "sourceMap": true
-   }
+   },
+   "include": ["stacks"],
+   "extends": "@tsconfig/node16/tsconfig.json",
 }

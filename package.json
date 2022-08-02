@@ -6,12 +6,18 @@
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
       "start": "ts-node src/index.ts",
-      "typeorm": "typeorm-ts-node-commonjs"
+      "typeorm": "typeorm-ts-node-commonjs",
+      "install:all": "yarn install",
+      "sst": "npx sst start"
    },
    "keywords": [],
    "author": "",
    "license": "ISC",
    "dependencies": {
+      "@serverless-stack/cli": "^1.6.5",
+      "@serverless-stack/resources": "^1.6.5",
+      "@tsconfig/node16": "^1.0.3",
+      "aws-cdk-lib": "^2.34.2",
       "csv-parser": "^3.0.0",
       "csv-writer": "^1.6.0",
       "dotenv": "^16.0.1",
@@ -19,7 +25,8 @@
       "pg": "^8.4.0",
       "reflect-metadata": "^0.1.13",
       "typeorm": "0.3.7",
-      "typescript": "^4.7.4"
+      "typescript": "^4.7.4",
+      "vitest": "^0.20.2"
    },
    "devDependencies": {
       "@types/node": "^16.11.10",
