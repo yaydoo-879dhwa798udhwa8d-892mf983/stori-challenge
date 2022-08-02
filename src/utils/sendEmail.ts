@@ -80,7 +80,7 @@ class Email {
         <th style="text-align: center">Total Balance</th>
       </tr>
       <tr style="text-align: center">
-        <td>${data.totalBalance}</td>
+        <td>${data.totalBalance.toFixed(2)}</td>
       </tr>
     </table>
     <table id="customers" style="text-align: center">

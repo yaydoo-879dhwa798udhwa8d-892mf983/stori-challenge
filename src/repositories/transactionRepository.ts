@@ -39,7 +39,7 @@ class TransactionRepository extends Repository {
     for (let i = 0; i < numberOfTransactions; i++) {
       const newTx = new Transaction();
       const debitOrCredit = randomInt(2) ? `+` : `-`;
-      newTx.transaction = `${debitOrCredit}${getRandomFloat(10, 350, 2)}`;
+      newTx.transaction = `${debitOrCredit}${getRandomFloat(100, 1500, 2)}`;
       newTx.date = `${randomInt(12)}/${randomInt(30)}`;
       newTx.account = account;
       await this.insertTransaction(newTx);
