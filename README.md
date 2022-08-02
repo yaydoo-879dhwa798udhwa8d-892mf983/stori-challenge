@@ -15,7 +15,7 @@ The program was coded with NodeJs/Javascript/Typescript. It can read file from s
   - Average Credit and Debit Amount per Month
 - Send test email by `ethereal.email` to account email
 
-
+---
 ### Enviroment file
 Create environment file and copy variables from .env.example
 ```Shell
@@ -27,7 +27,7 @@ Use existing enviroment example
 ```Shell
 mv .env.example .env
 ```
-
+---
 ## Execute With Docker Compose
 
 Example .env file
@@ -81,7 +81,7 @@ Exit database console
 ```Shell
 \q
 ```
-
+---
 ## Execute with Local enviroment
 
 Example .env file
@@ -119,3 +119,17 @@ npm run start youremail
 ```Shell
 docker-compose down
  ```
+
+---
+# Sequence diagram 
+
+![Alt text](/src/images/secuencia.png "Diagrama secuencia")
+
+---
+# UML Classes Diagram
+![Alt text](/src/images/uml.png "Diagrama UML")
+
+
+---
+# ER UML Database Diagram
+![Alt text](/src/images/eruml.png "Diagrama ER UML")
